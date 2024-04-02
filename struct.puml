@@ -1,0 +1,61 @@
+@startuml PERT
+left to right direction
+' Horizontal lines: -->, <--, <-->
+' Vertical lines: ->, <-, <->
+
+object users {
+  number: id
+  string: name
+  string: surname
+  string: lastname
+  string: documentNumber
+  string: email
+  role_id: role
+}
+
+users::role_id "1"-->"1" roles::id
+
+object roles {
+  number: id
+  string: name
+}
+
+object invoices {
+  number: id
+  user_id: recipient
+  user_id: sender
+  stock_id: endPoint
+  status_id: status
+  number: price
+}
+
+invoices::sender "1"-->"1" users::id
+invoices::recipient "1"-->"1" users::id
+invoices::status_id "1"-->"1" statuses::id
+invoices::endPoint "1"-->"1" stocks::stock_id
+invoices::id "1"<--"1.." cargoes::invoice
+
+object statuses {
+  number: id
+  string: name
+}
+
+object cargoes {
+  number: id
+  number: weight
+  invoices_id: invoice
+}
+
+object stocks {
+  number: id
+  string: name
+  string: adress
+  city_id: city
+}
+stocks::city "1"-->"1" cities::id
+object cities {
+  number: id
+  string: name
+}
+
+@enduml
