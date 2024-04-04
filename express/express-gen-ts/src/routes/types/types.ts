@@ -1,14 +1,15 @@
-import * as e from 'express';
-import { Query } from 'express-serve-static-core';
-
+import { IUser } from '@src/models/User'
+import * as e from 'express'
+import { Query } from 'express-serve-static-core'
 
 // **** Express **** //
 
 export interface IReq<T = void> extends e.Request {
-  body: T;
+  body: T
+  user?: IUser
 }
 
 export interface IReqQuery<T extends Query, U = void> extends e.Request {
-  query: T;
-  body: U;
+  query: T
+  body: U
 }

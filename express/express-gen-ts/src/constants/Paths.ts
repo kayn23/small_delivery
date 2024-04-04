@@ -2,6 +2,15 @@
  * Express router paths go here.
  */
 
+function resourse() {
+  return {
+    Index: '',
+    Show: '/:id',
+    Create: '',
+    Update: '/:id',
+    Delete: '/:id',
+  }
+}
 
 export default {
   Base: '/api',
@@ -12,4 +21,36 @@ export default {
     Update: '/update',
     Delete: '/delete/:id',
   },
-} as const;
+  Invoice: {
+    Base: '/invoices',
+    ...resourse(),
+  },
+  NewUsers: {
+    Base: '/users',
+    Index: '',
+    Show: '/:id',
+    Create: '',
+    Update: '/:id',
+    Delete: '/:id',
+  },
+  Stock: {
+    Base: '/stocks',
+    Index: '',
+    Show: '/:id',
+    Create: '',
+    Update: '/:id',
+    Delete: '/:id',
+  },
+  City: {
+    Base: '/cities',
+    ...resourse(),
+  },
+  Cargo: {
+    Base: '/cargoes',
+    ...resourse(),
+  },
+  Auth: {
+    Base: '/',
+    SignIn: '/signin',
+  },
+} as const

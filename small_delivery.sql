@@ -40,7 +40,7 @@ CREATE TABLE `invoices` (
   `recipient` bigint NOT NULL,
   `end_point` int NOT NULL,
   `status` int NOT NULL,
-  `price` decimal(10,0) NOT NULL,
+  `price` decimal(10,0),
   PRIMARY KEY (`id`),
   KEY `sender` (`sender`),
   KEY `recipient` (`recipient`),
@@ -83,7 +83,7 @@ DROP TABLE IF EXISTS `stocks`;
 CREATE TABLE `stocks` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `adress` varchar(255) NOT NULL,
+  `address` varchar(255) NOT NULL,
   `city_id` int DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `city_id` (`city_id`),

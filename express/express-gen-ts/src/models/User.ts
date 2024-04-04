@@ -1,21 +1,26 @@
-import moment from 'moment';
-
+import { RowDataPacket } from 'mysql2'
 
 // **** Variables **** //
 
-const INVALID_CONSTRUCTOR_PARAM = 'nameOrObj arg must a string or an object ' + 
-  'with the appropriate user keys.';
-
+const INVALID_CONSTRUCTOR_PARAM = 'nameOrObj arg must a string or an object ' + 'with the appropriate user keys.'
 
 // **** Types **** //
 
-export interface IUser {
-  id: number;
-  name: string;
-  email: string;
-  created: Date;
+export enum UserRole {
+  client = 1,
+  admin = 2,
 }
 
+export interface IUser extends RowDataPacket {
+  id: number
+  name: string
+  surname: string
+  lastname: string
+  email: string
+  document_number: string
+  role_id: UserRole
+  password?: string
+}
 
 // **** Functions **** //
 
@@ -24,27 +29,35 @@ export interface IUser {
  */
 function new_(
   name?: string,
+  lastname?: string,
+  surname?: string,
   email?: string,
-  created?: Date,
+  documentNumber?: string,
   id?: number, // id last cause usually set by db
+  role_id?: number,
+  password?: string,
 ): IUser {
   return {
-    id: (id ?? -1),
-    name: (name ?? ''),
-    email: (email ?? ''),
-    created: (created ? new Date(created) : new Date()),
-  };
+    id: id ?? -1,
+    name: name ?? '',
+    lastname: lastname ?? '',
+    surname: surname ?? '',
+    email: email ?? '',
+    document_number: documentNumber ?? '',
+    role_id: role_id ?? 1,
+    password,
+  } as IUser
 }
 
 /**
  * Get user instance from object.
  */
-function from(param: object): IUser {
+function fromObject(param: object): IUser {
   if (!isUser(param)) {
-    throw new Error(INVALID_CONSTRUCTOR_PARAM);
+    throw new Error(INVALID_CONSTRUCTOR_PARAM)
   }
-  const p = param as IUser;
-  return new_(p.name, p.email, p.created, p.id);
+  const p = param as IUser
+  return new_(p.name, p.surname, p.lastname, p.email, p.document_number, p.id, p.role_id, p.password)
 }
 
 /**
@@ -54,18 +67,25 @@ function isUser(arg: unknown): boolean {
   return (
     !!arg &&
     typeof arg === 'object' &&
-    'id' in arg && typeof arg.id === 'number' && 
-    'email' in arg && typeof arg.email === 'string' && 
-    'name' in arg && typeof arg.name === 'string' &&
-    'created' in arg && moment(arg.created as string | Date).isValid()
-  );
+    'id' in arg &&
+    typeof arg.id === 'number' &&
+    'email' in arg &&
+    typeof arg.email === 'string' &&
+    'name' in arg &&
+    typeof arg.name === 'string' &&
+    'surname' in arg &&
+    typeof arg.surname === 'string' &&
+    'lastname' in arg &&
+    typeof arg.lastname === 'string' &&
+    'documentNumber' in arg &&
+    typeof arg.documentNumber === 'string'
+  )
 }
-
 
 // **** Export default **** //
 
 export default {
   new: new_,
-  from,
+  fromObject,
   isUser,
-} as const;
+} as const
