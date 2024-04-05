@@ -1,0 +1,15 @@
+**/.git
+**/.svn
+**/.hg
+**/node_modules
+**/assets
+src/assets
+**/*.css
+**/*.sass
+**/*.scss
+
+**/*.png
+**/*.svg
+**/*.jpg
+**/*.ttf
+**/*.gif

@@ -9,6 +9,7 @@ import { useMysqlConnection } from '@src/repos/MysqlPool'
 import { ResultSetHeader } from 'mysql2'
 import { UserRole } from '@src/models/User'
 import showResultValidation from '@src/util/showResultValidation'
+import { ICargo } from '@src/models/Corgo'
 
 const invoiceRouter = Router()
 
@@ -83,5 +84,24 @@ invoiceRouter.delete(Paths.Invoice.Create, isAuth, isAdmin, async (req, res) => 
   await connection.query('delete from invoices where id = ?', [id])
   res.sendStatus(HttpStatusCodes.OK)
 })
+
+const subRouter = Router()
+subRouter.get(Paths.Invoice.Cargoes.Index, isAuth, async (req: IReq, res) => {
+  const id = req.params.id
+  if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
+  const { user } = req
+  if (!user) return res.sendStatus(HttpStatusCodes.UNAUTHORIZED)
+  const connection = await useMysqlConnection()
+  const [cargoes] = await connection.query<ICargo[]>('select * from cargoes where invoice_id = ?', [id])
+  res.json({
+    cargoes: cargoes.map((item) => {
+      return {
+        ...item,
+        qr: JSON.stringify({ invoice_id: item.invoices_id }),
+      }
+    }),
+  })
+})
+invoiceRouter.use(Paths.Invoice.Cargoes.Base, subRouter)
 
 export default invoiceRouter

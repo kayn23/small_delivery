@@ -11,6 +11,15 @@ function resourse() {
     Delete: '/:id',
   }
 }
+interface IPaths {
+  [key: string]: IPaths | string
+}
+function subRoute(config: IPaths) {
+  return {
+    Base: '/:id',
+    ...config,
+  }
+}
 
 export default {
   Base: '/api',
@@ -24,6 +33,10 @@ export default {
   Invoice: {
     Base: '/invoices',
     ...resourse(),
+    Cargoes: {
+      Base: '/:id',
+      Index: '/cargoes',
+    },
   },
   NewUsers: {
     Base: '/users',

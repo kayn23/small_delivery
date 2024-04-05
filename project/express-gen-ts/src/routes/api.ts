@@ -9,6 +9,7 @@ import stockRouter from './api/StockRoutes'
 import cityRouter from './api/CityRoutes'
 import cargoRouter from './api/CargoRoutes'
 import invoiceRouter from './api/InvoiceRoutes'
+import QRCode from 'qrcode'
 
 // **** Variables **** //
 
@@ -39,6 +40,7 @@ apiRouter.use(Paths.Stock.Base, stockRouter)
 apiRouter.use(Paths.City.Base, cityRouter)
 apiRouter.use(Paths.Cargo.Base, cargoRouter)
 apiRouter.use(Paths.Invoice.Base, invoiceRouter)
+
 // **** Export default **** //
 
 export default apiRouter
