@@ -1,10 +1,15 @@
-import type { IUser } from '~/types/user'
+import { UserRole, type IUser } from '~/types/user'
 
 export const useUserStore = defineStore(
   'user store',
   () => {
-    const currentUser = ref<IUser | undefined>(undefined)
+    const authStore = useAuthStore()
     const { fetch } = useCustomFetch()
+    const currentUser = ref<IUser | undefined>(undefined)
+    const isAdmin = computed(() => {
+      if (currentUser) return currentUser.value?.role_id === UserRole.admin
+      return false
+    })
 
     async function getMe() {
       const res = await fetch<{ user: IUser }>('/users')
@@ -39,6 +44,10 @@ export const useUserStore = defineStore(
       })
       return true
     }
+    async function signOut() {
+      currentUser.value = undefined
+      await authStore.signOut()
+    }
     return {
       currentUser,
       getMe,
@@ -46,6 +55,8 @@ export const useUserStore = defineStore(
       createUser,
       updateUser,
       deleteUser,
+      isAdmin,
+      signOut,
     }
   },
   {

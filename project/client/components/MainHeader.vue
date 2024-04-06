@@ -5,7 +5,7 @@
   >
     <logo-link></logo-link>
     <div class="flex items-center">
-      <!-- <header-nav-general-nav class="mr-4" /> -->
+      <header-nav-general-nav class="mr-4" />
       <ColorModeSelector></ColorModeSelector>
     </div>
   </header>

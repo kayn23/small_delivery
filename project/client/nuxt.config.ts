@@ -6,6 +6,14 @@ export default defineNuxtConfig({
   appConfig: {
     host: 'http://localhost:3000/api',
   },
+  app: {
+    head: {
+      htmlAttrs: {
+        lang: 'ru',
+      },
+      title: 'FastDelivery',
+    },
+  },
   devtools: { enabled: true },
   ssr: false,
   modules: [

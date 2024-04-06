@@ -1,26 +1,10 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   darkMode: 'class',
   content: [],
   theme: {
     colors: {
       transparent: 'transparent',
-      land: {
-        // background dark
-        0: '#2F304B',
-        // background light
-        1: '#D6DBEC',
-        // background card 1
-        2: '#8D95BB',
-        // background card 2
-        3: '#B6BDD9',
-        // background card 3
-        4: '#D6DBEC',
-        // background card 4
-        5: '#E9EBF5',
-        // border
-        6: '#7880A2',
-      },
       nord: {
         0: '#2E3440',
         /*
@@ -155,10 +139,15 @@ module.exports = {
       },
     },
     fontFamily: {
-      sans: ['PPPangramSans', 'sans-serif'],
+      sans: ['Roboto', 'sans-serif'],
     },
+    screens: {
+      mobile: { max: '640px' },
+      tablet: { max: '1024px' },
+    },
+
+    extend: {},
   },
-  extend: {},
   plugins: [],
   important: true,
 }

@@ -3,6 +3,10 @@ import * as yup from 'yup'
 const authStore = useAuthStore()
 const userStore = useUserStore()
 
+definePageMeta({
+  name: 'signin',
+})
+
 const schema = yup.object({
   email: yup.string().required(),
   password: yup.string().min(6).required(),
@@ -17,7 +21,9 @@ function auth(params: { email: string; password: string }) {
     },
   }).then((res) => {
     authStore.token = res.token
-    userStore.getMe()
+    navigateTo({
+      name: 'account home',
+    })
   })
 }
 </script>
