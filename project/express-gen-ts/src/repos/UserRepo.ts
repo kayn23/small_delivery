@@ -1,93 +1,32 @@
-import { IUser } from '@src/models/User';
-import { getRandomInt } from '@src/util/misc';
-import orm from './MockOrm';
+import { BadRequestEx, NotFoundEx } from '@src/util/exceptions'
+import { useMysqlConnection } from './MysqlPool'
+import { IUser } from '@src/models/User'
+import { ResultSetHeader } from 'mysql2'
 
-
-// **** Functions **** //
-
-/**
- * Get one user.
- */
-async function getOne(email: string): Promise<IUser | null> {
-  const db = await orm.openDb();
-  for (const user of db.users) {
-    if (user.email === email) {
-      return user;
-    }
+async function getOne(id: string | number, quiet_mode = false): Promise<IUser | undefined> {
+  const connection = await useMysqlConnection()
+  const [users] = await connection.query<IUser[]>(`select * from users where id = '${id}'`)
+  if (quiet_mode) {
+    if (users.length !== 1) return undefined
+  } else {
+    if (users.length === 0) throw new NotFoundEx()
+    if (users.length !== 1) throw new BadRequestEx()
   }
-  return null;
+  const user = users[0]
+  delete user.password
+  return user
 }
 
-/**
- * See if a user with the given id exists.
- */
-async function persists(id: number): Promise<boolean> {
-  const db = await orm.openDb();
-  for (const user of db.users) {
-    if (user.id === id) {
-      return true;
-    }
-  }
-  return false;
+async function createUser(user: IUser) {
+  const connection = await useMysqlConnection()
+  const [result] = await connection.query<ResultSetHeader>(
+    `insert into users(name,surname,lastname,email,document_number,password,role_id) values ('${user.name}', '${user.surname}', '${user.lastname}', '${user.email}', '${user.document_number}',
+  '${user.password ?? '***null***'}', 1)`,
+  )
+  return result.insertId
 }
-
-/**
- * Get all users.
- */
-async function getAll(): Promise<IUser[]> {
-  const db = await orm.openDb();
-  return db.users;
-}
-
-/**
- * Add one user.
- */
-async function add(user: IUser): Promise<void> {
-  const db = await orm.openDb();
-  user.id = getRandomInt();
-  db.users.push(user);
-  return orm.saveDb(db);
-}
-
-/**
- * Update a user.
- */
-async function update(user: IUser): Promise<void> {
-  const db = await orm.openDb();
-  for (let i = 0; i < db.users.length; i++) {
-    if (db.users[i].id === user.id) {
-      const dbUser = db.users[i];
-      db.users[i] = {
-        ...dbUser,
-        name: user.name,
-        email: user.email,
-      };
-      return orm.saveDb(db);
-    }
-  }
-}
-
-/**
- * Delete one user.
- */
-async function delete_(id: number): Promise<void> {
-  const db = await orm.openDb();
-  for (let i = 0; i < db.users.length; i++) {
-    if (db.users[i].id === id) {
-      db.users.splice(i, 1);
-      return orm.saveDb(db);
-    }
-  }
-}
-
-
-// **** Export default **** //
 
 export default {
   getOne,
-  persists,
-  getAll,
-  add,
-  update,
-  delete: delete_,
-} as const;
+  createUser,
+}

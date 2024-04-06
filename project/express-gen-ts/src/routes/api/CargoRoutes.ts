@@ -23,7 +23,7 @@ cargoRouter.get(Paths.Cargo.Show, async (req, res) => {
   if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
   const connection = await useMysqlConnection()
   const [cargoes] = await connection.query<ICargo[]>('select * from cargoes where id = ?', [id])
-  if (!showResultValidation(cargoes, res)) return
+  showResultValidation(cargoes)
   res.json({
     cargo: {
       ...cargoes[0],

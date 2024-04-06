@@ -1,14 +1,12 @@
-import HttpStatusCodes from '@src/constants/HttpStatusCodes'
-import { IRes } from '@src/routes/types/express/misc'
+import { BadRequestEx, NotFoundEx } from './exceptions'
 
-export default function <T>(value: Array<T>, res: IRes): boolean {
+export default function <T>(value: Array<T>, quiet_mode = false) {
   if (value.length === 0) {
-    res.sendStatus(HttpStatusCodes.NOT_FOUND)
-    return false
+    throw new NotFoundEx()
   }
-  if (value.length !== 1) {
-    res.sendStatus(HttpStatusCodes.BAD_REQUEST)
-    return false
+  if (value.length !== 1 && !quiet_mode) {
+    throw new BadRequestEx()
   }
-  return true
+  if (value.length !== 1) return undefined
+  return value
 }

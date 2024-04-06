@@ -12,4 +12,5 @@ export interface IReq<T = void> extends e.Request {
 export interface IReqQuery<T extends Query, U = void> extends e.Request {
   query: T
   body: U
+  user?: IUser
 }

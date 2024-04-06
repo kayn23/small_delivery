@@ -8,6 +8,7 @@ import HttpStatusCodes from '@src/constants/HttpStatusCodes'
 import isAuth from '../middleware/isAuth'
 import isAdmin from '../middleware/isAdmin'
 import { ResultSetHeader } from 'mysql2'
+import StockRepo from '@src/repos/StockRepo'
 
 const stockRouter = Router()
 
@@ -24,14 +25,9 @@ stockRouter.get(Paths.Stock.Index, async (_req: IReq, res: IRes) => {
 stockRouter.get(Paths.Stock.Show, async (_req: IReq, res: IRes) => {
   const id = _req.params.id
   if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
-  const connections = await useMysqlConnection()
-  const [stocks] = await connections.query<IStockInfo[]>(
-    'select s.*, c.name as city from stocks as s left join cities as c on c.id = s.city_id where s.id = ' + `'${id}'`,
-  )
-  if (stocks.length == 0) return res.sendStatus(HttpStatusCodes.NOT_FOUND)
-  if (stocks.length !== 1) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
+  const stock = await StockRepo.getOne(id)
   res.json({
-    stock: stocks[0],
+    stock,
   })
 })
 

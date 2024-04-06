@@ -8,6 +8,7 @@ import { IReq, IRes } from '../types/express/misc'
 import { IReq as IReqWith } from '../types/types'
 import { ResultSetHeader } from 'mysql2'
 import Paths from '@src/constants/Paths'
+import UserRepo from '@src/repos/UserRepo'
 
 const userRouter = Router()
 
@@ -20,12 +21,7 @@ userRouter.get(Paths.NewUsers.Index, isAuth, (req: IReqWith, res: IRes) => {
 
 userRouter.get(Paths.NewUsers.Show, isAuth, isAdmin, async (req: IReq, res: IRes) => {
   const id = req.params.id
-  const connection = await useMysqlConnection()
-  const [users] = await connection.query<IUser[]>(`select * from users where id = '${id}'`)
-  if (users.length === 0) return res.sendStatus(HttpStatusCodes.NOT_FOUND)
-  if (users.length !== 1) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
-  const user = users[0]
-  delete user.password
+  const user = await UserRepo.getOne(id)
   res.json({
     user,
   })
@@ -33,14 +29,10 @@ userRouter.get(Paths.NewUsers.Show, isAuth, isAdmin, async (req: IReq, res: IRes
 
 userRouter.post(Paths.NewUsers.Create, isAuth, isAdmin, async (req: IReqWith<{ user: IUser }>, res: IRes) => {
   const { user } = req.body
-  const connection = await useMysqlConnection()
-  const [result] = await connection.query<ResultSetHeader>(
-    `insert into users(name,surname,lastname,email,document_number,password,role_id) values ('${user.name}', '${user.surname}', '${user.lastname}', '${user.email}', '${user.document_number}',
-  '${user.password ?? '***null***'}', 1)`,
-  )
+  const user_id = UserRepo.createUser(user)
   res
     .json({
-      user_id: result.insertId,
+      user_id,
     })
     .status(HttpStatusCodes.CREATED)
 })

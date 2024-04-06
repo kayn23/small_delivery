@@ -1,27 +1,29 @@
-import Paths from '@src/constants/Paths'
-import { Router } from 'express'
-import isAuth from '../middleware/isAuth'
-import { IReq } from '../types/types'
-import isAdmin from '../middleware/isAdmin'
-import { IInvoice } from '@src/models/Invoice'
 import HttpStatusCodes from '@src/constants/HttpStatusCodes'
-import { useMysqlConnection } from '@src/repos/MysqlPool'
-import { ResultSetHeader } from 'mysql2'
-import { UserRole } from '@src/models/User'
-import showResultValidation from '@src/util/showResultValidation'
+import Paths from '@src/constants/Paths'
 import { ICargo } from '@src/models/Cargo'
+import Invoice, { IInvoice } from '@src/models/Invoice'
+import InvoiceRepo from '@src/repos/InvoiceRepo'
+import { useMysqlConnection } from '@src/repos/MysqlPool'
+import { Router } from 'express'
+import { ResultSetHeader } from 'mysql2'
+import isAdmin from '../middleware/isAdmin'
+import isAuth from '../middleware/isAuth'
+import { IReq, IReqQuery } from '../types/types'
+import { IFilter } from '@src/util/filterPrepare'
 
 const invoiceRouter = Router()
 
-invoiceRouter.get(Paths.Invoice.Index, isAuth, async (req: IReq, res) => {
+invoiceRouter.get(Paths.Invoice.Index, isAuth, async (req: IReqQuery<IFilter>, res) => {
   // todo need filters
   const { user } = req
+  const query = req.query
   if (!user) return res.sendStatus(HttpStatusCodes.UNAUTHORIZED)
-  const connection = await useMysqlConnection()
-  const [invoices] = await connection.query<IInvoice[]>('select * from invoices where sender = ? or recipient = ?', [
-    user.id,
-    user.id,
-  ])
+  const invoices = await InvoiceRepo.getAll(user.id, query)
+  // const connection = await useMysqlConnection()
+  // const [invoices] = await connection.query<IInvoice[]>('select * from invoices where sender = ? or recipient = ?', [
+  //   user.id,
+  //   user.id,
+  // ])
   res.json({
     invoices: [...invoices],
   })
@@ -31,15 +33,10 @@ invoiceRouter.get(Paths.Invoice.Show, isAuth, async (req: IReq, res) => {
   if (!user) return res.sendStatus(HttpStatusCodes.UNAUTHORIZED)
   const id = req.params.id
   if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
-  let sql = 'select * from invoices where id = ?'
-  const connection = await useMysqlConnection()
-  const [invoices] = await connection.query<IInvoice[]>(sql, [id])
-  if (!showResultValidation(invoices, res)) return
-  const [invoice] = invoices
-  if ((invoice.recipient !== user.id || invoice.sender !== user.id) && user.role_id !== UserRole.admin)
-    return res.sendStatus(HttpStatusCodes.FORBIDDEN)
+  const invoice = await InvoiceRepo.getOneWithInfo(id)
+  if (invoice) Invoice.checkRight(invoice, user)
   res.json({
-    invoice: invoice,
+    invoice,
   })
 })
 

@@ -23,7 +23,7 @@ cityRouter.get(Paths.City.Show, async (req, res) => {
   if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
   const connection = await useMysqlConnection()
   const [cities] = await connection.query<ICity[]>('select * from cities where id = ?', [id])
-  if (!showResultValidation(cities, res)) return
+  showResultValidation(cities)
   res.json({
     city: {
       ...cities[0],
