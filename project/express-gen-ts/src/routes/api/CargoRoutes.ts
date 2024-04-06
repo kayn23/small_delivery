@@ -7,7 +7,7 @@ import { ResultSetHeader } from 'mysql2'
 import isAuth from '../middleware/isAuth'
 import isAdmin from '../middleware/isAdmin'
 import { IReq } from '../types/types'
-import { ICargo } from '@src/models/Corgo'
+import { ICargo } from '@src/models/Cargo'
 
 const cargoRouter = Router()
 

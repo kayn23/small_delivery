@@ -1,0 +1,71 @@
+@use 'sass:map';
+@use '../_colors.sass' as nord;
+@use 'element-plus/theme-chalk/src/mixins/function.scss' as *;
+$-colors: (
+  'white': nord.$nord-6,
+  'black': nord.$nord-0,
+  'primary': (
+    'base': nord.$nord-9,
+  ),
+  'success': (
+    'base': nord.$nord-14,
+  ),
+  'warning': (
+    'base': nord.$nord-13,
+  ),
+  'danger': (
+    'base': nord.$nord-11,
+  ),
+  'error': (
+    'base': nord.$nord-11,
+  ),
+  'info': (
+    'base': nord.$nord-1,
+  ),
+  'button-bg-color': nord.$nord-1,
+);
+$pagination: () !default;
+
+@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+  $colors: $-colors,
+  $bg-color: (
+    '': nord.$nord-5,
+    'overlay': nord.$nord-4,
+  ),
+  $text-color: (
+    'primary': nord.$nord-0,
+    'secondary': nord.$nord-1,
+    'regular': nord.$nord-0,
+  ),
+  $fill-color: (
+    'blank': nord.$nord-5,
+    'light': nord.$nord-10,
+    '': nord.$nord-10,
+  ),
+  $box-shadow: (
+    'light': (
+      0px 0px 12px nord.$nord-5,
+    ),
+  ),
+  $disabled: (
+    'bg-color': getCssVar('fill-color', 'blank'),
+  ),
+  /* $border-color-hover: nord.$nord-10, */ $pagination:
+    map.merge(
+      (
+        'bg-color': transparent,
+        /* 'button-color': nord.$nord-1, */ 'button-disabled-bg-color':
+          transparent,
+        /* 'text-color': nord.$nord-0, */
+      ),
+      $pagination
+    ),
+  $button: (
+    'hover-text-color': nord.$nord-3,
+    /* 'hover-bg-color': getCssVar('color-primary', 'light-3'), */
+      'hover-bg-color': nord.$nord-8,
+  ),
+);
+
+@use './dark.scss';
+@use './button.scss';

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-export default defineStore(
+export const useAuthStore = defineStore(
   'authStore',
   () => {
     const token = ref<string | undefined>()
@@ -25,3 +25,4 @@ export default defineStore(
   },
   { persist: true },
 )
+export default useAuthStore

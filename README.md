@@ -1,29 +1,3 @@
-## User
-
-- name
-- surname
-- lastname
-- documentNumber
-- email
-- role
-
-## Order
-
-- sender
-- recipient
-- price
-- endPoint
-- status
-
-## Stock
-
-- name
-- city
-
-## city
-
-- name
-
 # Акторы
 
 ## Клиент

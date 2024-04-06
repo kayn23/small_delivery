@@ -9,6 +9,7 @@ import EnvVars from '@src/constants/EnvVars'
 async function signin(req: IReq<{ email: string; password: string }>, res: IRes) {
   const body = req.body
   const connection = await useMysqlConnection()
+  console.log(`select * from users where email = '${body.email}' and password = '${body.password}'`)
   const [users] = await connection.query<IUser[]>(
     `select * from users where email = '${body.email}' and password = '${body.password}'`,
   )

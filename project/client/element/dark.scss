@@ -1,0 +1,52 @@
+@use 'sass:map';
+@use '../_colors.sass' as nord;
+
+$-colors: (
+  'white': nord.$nord-3,
+  'black': nord.$nord-6,
+  'primary': (
+    'base': nord.$nord-9,
+  ),
+  'success': (
+    'base': nord.$nord-14,
+  ),
+  'warning': (
+    'base': nord.$nord-13,
+  ),
+  'danger': (
+    'base': nord.$nord-11,
+  ),
+  'error': (
+    'base': nord.$nord-11,
+  ),
+  'info': (
+    'base': nord.$nord-1,
+  ),
+  'button-bg-color': nord.$nord-4,
+);
+@forward 'element-plus/theme-chalk/src/dark/var.scss' with (
+  $colors: $-colors,
+  $bg-color: (
+    '': nord.$nord-1,
+    'overlay': nord.$nord-2,
+  ),
+  $text-color: (
+    'primary': nord.$nord-6,
+    'secondary': nord.$nord-5,
+    'regular': nord.$nord-6,
+  ),
+  $fill-color: (
+    'blank': nord.$nord-1,
+    '': nord.$nord-10,
+    'light': nord.$nord-10,
+  ),
+  $box-shadow: (
+    'light': (
+      0px 0px 12 px nord.$nord-2,
+    ),
+  )
+);
+
+$disabled: (
+  'bg-color': nord.$nord-3,
+);

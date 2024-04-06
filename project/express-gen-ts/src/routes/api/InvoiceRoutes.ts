@@ -9,7 +9,7 @@ import { useMysqlConnection } from '@src/repos/MysqlPool'
 import { ResultSetHeader } from 'mysql2'
 import { UserRole } from '@src/models/User'
 import showResultValidation from '@src/util/showResultValidation'
-import { ICargo } from '@src/models/Corgo'
+import { ICargo } from '@src/models/Cargo'
 
 const invoiceRouter = Router()
 

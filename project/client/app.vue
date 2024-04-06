@@ -1,7 +1,4 @@
-<script lang="ts" setup>
-import useAuthStore from '~/store/useAuthStore'
-useAuthStore()
-</script>
+<script lang="ts" setup></script>
 <template>
   <NuxtLayout>
     <NuxtPage />
