@@ -17,7 +17,6 @@ export interface IUser extends RowDataPacket {
   surname: string
   lastname: string
   email: string
-  document_number: string
   role_id: UserRole
   password?: string
 }
@@ -32,7 +31,6 @@ function new_(
   lastname?: string,
   surname?: string,
   email?: string,
-  documentNumber?: string,
   id?: number, // id last cause usually set by db
   role_id?: number,
   password?: string,
@@ -43,7 +41,6 @@ function new_(
     lastname: lastname ?? '',
     surname: surname ?? '',
     email: email ?? '',
-    document_number: documentNumber ?? '',
     role_id: role_id ?? 1,
     password,
   } as IUser
@@ -57,7 +54,7 @@ function fromObject(param: object): IUser {
     throw new Error(INVALID_CONSTRUCTOR_PARAM)
   }
   const p = param as IUser
-  return new_(p.name, p.surname, p.lastname, p.email, p.document_number, p.id, p.role_id, p.password)
+  return new_(p.name, p.surname, p.lastname, p.email, p.id, p.role_id, p.password)
 }
 
 /**
@@ -76,9 +73,7 @@ function isUser(arg: unknown): boolean {
     'surname' in arg &&
     typeof arg.surname === 'string' &&
     'lastname' in arg &&
-    typeof arg.lastname === 'string' &&
-    'documentNumber' in arg &&
-    typeof arg.documentNumber === 'string'
+    typeof arg.lastname === 'string'
   )
 }
 

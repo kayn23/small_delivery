@@ -1,5 +1,5 @@
 <script lang="ts" setup></script>
 <template>
-  <div>admin nav</div>
+  <NuxtLink :to="{ name: 'user list' }">Клиенты</NuxtLink>
 </template>
 <style lang="sass"></style>

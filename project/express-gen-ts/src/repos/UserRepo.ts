@@ -17,16 +17,40 @@ async function getOne(id: string | number, quiet_mode = false): Promise<IUser | 
   return user
 }
 
+async function getAll(): Promise<IUser[]> {
+  const connection = await useMysqlConnection()
+  const [users] = await connection.query<IUser[]>(`select * from users`)
+  console.log(users)
+  return users
+}
+
 async function createUser(user: IUser) {
   const connection = await useMysqlConnection()
   const [result] = await connection.query<ResultSetHeader>(
-    `insert into users(name,surname,lastname,email,document_number,password,role_id) values ('${user.name}', '${user.surname}', '${user.lastname}', '${user.email}', '${user.document_number}',
-  '${user.password ?? '***null***'}', 1)`,
+    `insert into users(name,surname,lastname,email,password) values (?,?,?,?,?)`,
+    [user.name, user.surname, user.lastname, user.email, user.password ?? '***null***', 1],
   )
   return result.insertId
+}
+
+async function updateUser(id: string | number, user: IUser) {
+  const connection = await useMysqlConnection()
+  const [result] = await connection.query<ResultSetHeader>(
+    `update users set 
+    name = '${user.name}',
+    surname = '${user.surname}',
+    lastname = '${user.lastname}',
+    email = '${user.email}',
+    role_id = '${user.role_id}'
+    where id = '${id}' where id = ?`,
+    [id],
+  )
+  if (result.affectedRows === 0) throw new NotFoundEx()
 }
 
 export default {
   getOne,
   createUser,
+  updateUser,
+  getAll,
 }

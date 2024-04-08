@@ -19,8 +19,11 @@ export interface IInvoiceWithInfo extends IInvoice {
 }
 
 function checkRight(invoice: IInvoice, user: IUser) {
-  if ((invoice.recipient !== user.id || invoice.sender !== user.id) && user.role_id !== UserRole.admin)
-    throw new ForbiddenEx()
+  if (user.role_id !== UserRole.admin) {
+    if (invoice.recipient !== user.id && invoice.sender !== user.id) {
+      throw new ForbiddenEx()
+    }
+  }
 }
 
 export default {

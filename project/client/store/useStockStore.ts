@@ -4,13 +4,14 @@ import type { IStock, IStockInfo } from '~/types/stock'
 export default defineStore('stock store', () => {
   const stocks = reactive<IStockInfo[]>([])
   const { fetch } = useCustomFetch()
+  const appconfig = useAppConfig()
   async function getAll() {
-    const res = await $fetch<{ stocks: IStockInfo[] }>('/stocks')
+    const res = await $fetch<{ stocks: IStockInfo[] }>(appconfig.host + '/stocks')
     stocks.splice(0, stocks.length, ...res.stocks)
     return res
   }
   async function getStock(id: string | number) {
-    const res = await $fetch<{ stock: IStockInfo }>('/stocks/' + id)
+    const res = await $fetch<{ stock: IStockInfo }>(appconfig.host + '/stocks/' + id)
     return res
   }
   async function createStock(stock: IStock) {

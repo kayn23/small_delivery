@@ -6,7 +6,6 @@ import isAdmin from '../middleware/isAdmin'
 import isAuth from '../middleware/isAuth'
 import { IReq, IRes } from '../types/express/misc'
 import { IReq as IReqWith } from '../types/types'
-import { ResultSetHeader } from 'mysql2'
 import Paths from '@src/constants/Paths'
 import UserRepo from '@src/repos/UserRepo'
 
@@ -29,7 +28,7 @@ userRouter.get(Paths.NewUsers.Show, isAuth, isAdmin, async (req: IReq, res: IRes
 
 userRouter.post(Paths.NewUsers.Create, isAuth, isAdmin, async (req: IReqWith<{ user: IUser }>, res: IRes) => {
   const { user } = req.body
-  const user_id = UserRepo.createUser(user)
+  const user_id = await UserRepo.createUser(user)
   res
     .json({
       user_id,
@@ -40,19 +39,7 @@ userRouter.post(Paths.NewUsers.Create, isAuth, isAdmin, async (req: IReqWith<{ u
 userRouter.patch(Paths.NewUsers.Update, isAuth, isAdmin, async (req: IReq<{ user: IUser }>, res: IRes) => {
   const id = req.params.id
   const { user } = req.body
-  const connection = await useMysqlConnection()
-  const [result] = await connection.query<ResultSetHeader>(
-    `update users set 
-    name = '${user.name}',
-    surname = '${user.surname}',
-    lastname = '${user.lastname}',
-    email = '${user.email}',
-    document_number = '${user.document_number}',
-    role_id = '${user.role_id}'
-    where id = '${id}' where id = ?`,
-    [id],
-  )
-  if (result.affectedRows === 0) return res.sendStatus(HttpStatusCodes.NOT_FOUND)
+  await UserRepo.updateUser(id, user)
   res.json({
     user_id: id,
   })

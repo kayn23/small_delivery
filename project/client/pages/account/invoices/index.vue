@@ -1,4 +1,9 @@
 <script lang="ts" setup>
+definePageMeta({
+  layout: 'account',
+  middleware: ['is-login'],
+  name: 'invoice list',
+})
 const invoiceStore = useInvoiceStore()
 const { data } = useAsyncData(() => {
   return invoiceStore.getAll()
@@ -7,10 +12,8 @@ const { data } = useAsyncData(() => {
 <template>
   <div>
     <h1>invoices</h1>
-    <json-viewer
-      :value="data || {}"
-      :theme="$colorMode.preference"
-    ></json-viewer>
+
+    <account-invoice-list></account-invoice-list>
   </div>
 </template>
 <style lang="sass"></style>

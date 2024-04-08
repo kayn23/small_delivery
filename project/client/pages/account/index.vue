@@ -8,10 +8,10 @@ const userStore = useUserStore()
 const user = computed(() => userStore.currentUser)
 </script>
 <template>
-  <admin-header-panel></admin-header-panel>
-  <user-info-preview
-    :user-info="user"
-    v-if="user"
+  <admin-header-panel
+    v-if="userStore.isAdmin"
+    class="mb-4"
   />
+  <account-invoice-list></account-invoice-list>
 </template>
 <style lang="sass"></style>

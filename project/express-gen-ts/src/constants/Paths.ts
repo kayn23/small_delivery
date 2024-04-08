@@ -41,6 +41,7 @@ export default {
   NewUsers: {
     Base: '/users',
     Index: '',
+    All: '/users_all',
     Show: '/:id',
     Create: '',
     Update: '/:id',

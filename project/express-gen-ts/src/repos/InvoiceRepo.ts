@@ -12,7 +12,7 @@ async function getOneWithInfo(id: string | number, queit_mode = false): Promise<
   const res = showResultValidation<IInvoice>(invoices, queit_mode)
   if (queit_mode) return undefined
   const [invoice] = res as IInvoiceWithInfo[]
-  invoice.recipient_info = await UserRepo.getOne(invoice.sender, true)
+  invoice.recipient_info = await UserRepo.getOne(invoice.recipient, true)
   invoice.sender_info = await UserRepo.getOne(invoice.sender, true)
   invoice.end_point_info = await StockRepo.getOne(invoice.end_point, true)
   return invoice
@@ -20,7 +20,7 @@ async function getOneWithInfo(id: string | number, queit_mode = false): Promise<
 
 async function getAll(user_id: number, filter?: IFilter) {
   const connection = await useMysqlConnection()
-  let sql = 'select * from invoices'
+  let sql = 'select * from invoices where '
   let filterprep: IResFilter
   if (filter) {
     filterprep = filterPrepare(filter)
@@ -31,8 +31,8 @@ async function getAll(user_id: number, filter?: IFilter) {
     }
   }
   sql += filterprep.sql
-  sql += ' and (sender = ? or recipient = ?)'
-  console.log(sql)
+  if (filter && Object.keys(filter).length !== 0) sql += ' and '
+  sql += '(sender = ? or recipient = ?)'
   const [invoices] = await connection.query<IInvoice[]>(sql, [...filterprep.values, user_id, user_id])
   return invoices
 }

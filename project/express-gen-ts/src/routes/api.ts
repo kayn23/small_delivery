@@ -10,6 +10,9 @@ import cityRouter from './api/CityRoutes'
 import cargoRouter from './api/CargoRoutes'
 import invoiceRouter from './api/InvoiceRoutes'
 import QRCode from 'qrcode'
+import isAuth from './middleware/isAuth'
+import isAdmin from './middleware/isAdmin'
+import UserRepo from '@src/repos/UserRepo'
 
 // **** Variables **** //
 
@@ -36,6 +39,11 @@ const apiRouter = Router(),
 // apiRouter.use(Paths.Users.Base, userRouter)
 apiRouter.use(Paths.Auth.Base, authRouter)
 apiRouter.use(Paths.NewUsers.Base, UserRoutes)
+apiRouter.get(Paths.NewUsers.All, isAuth, isAdmin, async (_req, res) => {
+  res.json({
+    users: await UserRepo.getAll(),
+  })
+})
 apiRouter.use(Paths.Stock.Base, stockRouter)
 apiRouter.use(Paths.City.Base, cityRouter)
 apiRouter.use(Paths.Cargo.Base, cargoRouter)

@@ -4,7 +4,7 @@ export default defineStore('city store', () => {
   const cities = reactive<ICity[]>([])
   const appconfig = useAppConfig()
   const { fetch } = useCustomFetch()
-  async function getCities() {
+  async function getAll() {
     const res = await $fetch<{ cities: ICity[] }>(appconfig.host + '/cities')
     cities.splice(0, cities.length, ...res.cities)
     return res
@@ -36,7 +36,7 @@ export default defineStore('city store', () => {
   }
   return {
     cities,
-    getCities,
+    getAll,
     createCity,
     updateCity,
     deleteCity,

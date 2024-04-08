@@ -4,12 +4,16 @@ export enum UserRole {
 }
 
 export interface IUser {
-  id: number
+  id?: number
   name: string
   surname: string
   lastname: string
   email: string
-  document_number: string
-  role_id: UserRole
+  role_id?: UserRole
   password?: string
+}
+
+export enum UserType {
+  sender,
+  recipient,
 }
