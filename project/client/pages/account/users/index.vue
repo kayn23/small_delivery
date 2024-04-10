@@ -10,6 +10,11 @@ const { data } = useAsyncData(() => userStore.getAll())
 
 <template>
   <div v-if="data">
+    <NuxtLink
+      :to="{ name: 'user new' }"
+      class="el-button el-button--primary mb-4"
+      >Создать клиента</NuxtLink
+    >
     <account-user-card
       class="mb-4"
       v-for="user in data.users"

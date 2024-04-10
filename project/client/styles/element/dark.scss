@@ -20,7 +20,7 @@ $-colors: (
     'base': nord.$nord-11,
   ),
   'info': (
-    'base': nord.$nord-1,
+    'base': nord.$nord-4,
   ),
   'button-bg-color': nord.$nord-4,
 );
@@ -29,6 +29,9 @@ $-colors: (
   $bg-color: (
     '': nord.$nord-1,
     'overlay': nord.$nord-2,
+  ),
+  $border-color: (
+    'light': nord.$nord-6,
   ),
   $text-color: (
     'primary': nord.$nord-6,

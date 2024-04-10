@@ -1,6 +1,7 @@
 export interface IFilter extends Record<string, string | string[]> {}
 const filterType: Record<string, string> = {
   eq: '=',
+  noteq: '!=',
   gt: '<',
   lt: '>',
   gteq: '<=',
@@ -17,7 +18,7 @@ function filterPrepare(filters: IFilter): IResFilter {
   }
   const arr = Object.entries(filters)
   if (arr.length === 0) return res
-  res.sql += ' where '
+  res.sql += ' '
   const prep = arr.map(([key, values]) => {
     const [k, t] = key.split('_')
     let sql = ''
@@ -34,7 +35,7 @@ function filterPrepare(filters: IFilter): IResFilter {
       val: arr,
     }
   })
-  res.sql += `(${prep.map((item) => item.sql).join(' or ')})`
+  res.sql += `(${prep.map((item) => item.sql).join(' and ')})`
   res.values.push(...prep.map((item) => item.val).flat(Infinity))
   console.log('prepare filter', res)
   return res

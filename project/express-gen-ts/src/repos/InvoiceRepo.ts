@@ -32,7 +32,7 @@ async function getAll(user_id: number, filter?: IFilter) {
   }
   sql += filterprep.sql
   if (filter && Object.keys(filter).length !== 0) sql += ' and '
-  sql += '(sender = ? or recipient = ?)'
+  sql += '(sender = ? or recipient = ?) order by status asc'
   const [invoices] = await connection.query<IInvoice[]>(sql, [...filterprep.values, user_id, user_id])
   return invoices
 }

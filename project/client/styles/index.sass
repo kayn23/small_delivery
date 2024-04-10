@@ -70,7 +70,6 @@ main
 
 @media(max-width: 767px)
 
-
 .custom-form
   @apply bg-nord-6 dark:bg-nord-0
 .form-field
@@ -86,9 +85,11 @@ main
 .form-submit
   @apply w-full block bg-nord-6 dark:bg-nord-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-4 rounded-md transition-all ease-in-out delay-75 active:scale-95 mt-8
 
-
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active
   transition: background-color 5000s ease-in-out 0s
+
+.el-select__selection.is-near
+  margin-left: 0 !important

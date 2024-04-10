@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { FetchError } from 'ofetch'
 import * as yup from 'yup'
 const authStore = useAuthStore()
-const userStore = useUserStore()
+import { ElMessageBox } from 'element-plus'
 
 definePageMeta({
   name: 'signin',
@@ -19,12 +20,19 @@ function auth(params: { email: string; password: string }) {
     body: {
       ...params,
     },
-  }).then((res) => {
-    authStore.token = res.token
-    navigateTo({
-      name: 'account home',
-    })
   })
+    .then((res) => {
+      authStore.token = res.token
+      navigateTo({
+        name: 'account home',
+      })
+    })
+    .catch((err: FetchError<{ errors: string }>) => {
+      ElMessageBox({
+        type: 'error',
+        message: `Ошибка ${err.status}`,
+      })
+    })
 }
 </script>
 <template>

@@ -20,7 +20,7 @@ import HttpStatusCodes from '@src/constants/HttpStatusCodes'
 import { NodeEnvs } from '@src/constants/misc'
 import { RouteError } from '@src/other/classes'
 import cors from 'cors'
-import { BadRequestEx, ForbiddenEx, NotFoundEx } from './util/exceptions'
+import { BadRequestEx, ForbiddenEx, NotFoundEx, UnauthorizedEx } from './util/exceptions'
 
 // **** Variables **** //
 
@@ -71,6 +71,9 @@ app.use(
     }
     if (err instanceof ForbiddenEx) {
       status = HttpStatusCodes.FORBIDDEN
+    }
+    if (err instanceof UnauthorizedEx) {
+      status = HttpStatusCodes.UNAUTHORIZED
     }
     return res.status(status).json({ error: err.message })
   },

@@ -32,6 +32,10 @@ $pagination: () !default;
     '': nord.$nord-5,
     'overlay': nord.$nord-4,
   ),
+  $border-color: (
+    '': nord.$nord-4,
+    'light': nord.$nord-4,
+  ),
   $text-color: (
     'primary': nord.$nord-0,
     'secondary': nord.$nord-1,
@@ -65,6 +69,7 @@ $pagination: () !default;
     /* 'hover-bg-color': getCssVar('color-primary', 'light-3'), */
       'hover-bg-color': nord.$nord-8,
   ),
+
 );
 
 @use './dark.scss';

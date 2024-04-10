@@ -10,6 +10,7 @@ import isAdmin from '../middleware/isAdmin'
 import isAuth from '../middleware/isAuth'
 import { IReq, IReqQuery } from '../types/types'
 import { IFilter } from '@src/util/filterPrepare'
+import { BadRequestEx, NotFoundEx, UnauthorizedEx } from '@src/util/exceptions'
 
 const invoiceRouter = Router()
 
@@ -19,20 +20,15 @@ invoiceRouter.get(Paths.Invoice.Index, isAuth, async (req: IReqQuery<IFilter>, r
   const query = req.query
   if (!user) return res.sendStatus(HttpStatusCodes.UNAUTHORIZED)
   const invoices = await InvoiceRepo.getAll(user.id, query)
-  // const connection = await useMysqlConnection()
-  // const [invoices] = await connection.query<IInvoice[]>('select * from invoices where sender = ? or recipient = ?', [
-  //   user.id,
-  //   user.id,
-  // ])
   res.json({
     invoices: [...invoices],
   })
 })
 invoiceRouter.get(Paths.Invoice.Show, isAuth, async (req: IReq, res) => {
   const { user } = req
-  if (!user) return res.sendStatus(HttpStatusCodes.UNAUTHORIZED)
+  if (!user) throw new UnauthorizedEx()
   const id = req.params.id
-  if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
+  if (!id) throw new NotFoundEx()
   const invoice = await InvoiceRepo.getOneWithInfo(id)
   if (invoice) Invoice.checkRight(invoice, user)
   res.json({
@@ -43,7 +39,7 @@ invoiceRouter.get(Paths.Invoice.Show, isAuth, async (req: IReq, res) => {
 invoiceRouter.post(Paths.Invoice.Create, isAuth, async (req: IReq<{ invoice: IInvoice }>, res) => {
   const { user } = req
   const { invoice } = req.body
-  if (!user) return res.sendStatus(HttpStatusCodes.UNAUTHORIZED)
+  if (!user) throw new UnauthorizedEx()
   const connection = await useMysqlConnection()
   let sql = 'insert into invoices(sender, recipient, end_point, status) values (?,?,?,1)'
   const [result] = await connection.query<ResultSetHeader>(sql, [
@@ -60,7 +56,7 @@ invoiceRouter.post(Paths.Invoice.Create, isAuth, async (req: IReq<{ invoice: IIn
 })
 invoiceRouter.patch(Paths.Invoice.Create, isAuth, isAdmin, async (req: IReq<{ invoice: IInvoice }>, res) => {
   const id = req.params.id
-  if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
+  if (!id) throw new BadRequestEx()
   const { invoice } = req.body
   const connection = await useMysqlConnection()
   await connection.query('update invoices set sender = ?, recipient = ?, end_point = ?, status = ?, price = ?', [
@@ -76,7 +72,7 @@ invoiceRouter.patch(Paths.Invoice.Create, isAuth, isAdmin, async (req: IReq<{ in
 })
 invoiceRouter.delete(Paths.Invoice.Create, isAuth, isAdmin, async (req, res) => {
   const id = req.params.id
-  if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
+  if (!id) throw new BadRequestEx()
   const connection = await useMysqlConnection()
   await connection.query('delete from invoices where id = ?', [id])
   res.sendStatus(HttpStatusCodes.OK)
@@ -85,9 +81,9 @@ invoiceRouter.delete(Paths.Invoice.Create, isAuth, isAdmin, async (req, res) => 
 const subRouter = Router()
 subRouter.get(Paths.Invoice.Cargoes.Index, isAuth, async (req: IReq, res) => {
   const id = req.params.id
-  if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
+  if (!id) throw new BadRequestEx()
   const { user } = req
-  if (!user) return res.sendStatus(HttpStatusCodes.UNAUTHORIZED)
+  if (!user) throw new UnauthorizedEx()
   const connection = await useMysqlConnection()
   const [cargoes] = await connection.query<ICargo[]>('select * from cargoes where invoice_id = ?', [id])
   res.json({

@@ -16,3 +16,9 @@ export class ForbiddenEx extends Error {
     this.message = 'forbidden'
   }
 }
+export class UnauthorizedEx extends Error {
+  constructor() {
+    super()
+    this.message = 'unauthorized'
+  }
+}
