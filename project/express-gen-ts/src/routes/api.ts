@@ -13,6 +13,7 @@ import QRCode from 'qrcode'
 import isAuth from './middleware/isAuth'
 import isAdmin from './middleware/isAdmin'
 import UserRepo from '@src/repos/UserRepo'
+import statusRouter from './api/StatusRoutes'
 
 // **** Variables **** //
 
@@ -48,6 +49,7 @@ apiRouter.use(Paths.Stock.Base, stockRouter)
 apiRouter.use(Paths.City.Base, cityRouter)
 apiRouter.use(Paths.Cargo.Base, cargoRouter)
 apiRouter.use(Paths.Invoice.Base, invoiceRouter)
+apiRouter.use(Paths.Status.Base, statusRouter)
 
 // **** Export default **** //
 

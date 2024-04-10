@@ -54,18 +54,15 @@ invoiceRouter.post(Paths.Invoice.Create, isAuth, async (req: IReq<{ invoice: IIn
     })
     .status(HttpStatusCodes.CREATED)
 })
-invoiceRouter.patch(Paths.Invoice.Create, isAuth, isAdmin, async (req: IReq<{ invoice: IInvoice }>, res) => {
+invoiceRouter.patch(Paths.Invoice.Update, isAuth, isAdmin, async (req: IReq<{ invoice: IInvoice }>, res) => {
   const id = req.params.id
   if (!id) throw new BadRequestEx()
   const { invoice } = req.body
   const connection = await useMysqlConnection()
-  await connection.query('update invoices set sender = ?, recipient = ?, end_point = ?, status = ?, price = ?', [
-    invoice.sender,
-    invoice.recipient,
-    invoice.end_point,
-    invoice.status,
-    invoice.price,
-  ])
+  await connection.query(
+    'update invoices set sender = ?, recipient = ?, end_point = ?, status = ?, price = ? where id = ?',
+    [invoice.sender, invoice.recipient, invoice.end_point, invoice.status, invoice.price, id],
+  )
   res.json({
     invoice_id: id,
   })

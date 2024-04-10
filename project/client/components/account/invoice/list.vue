@@ -23,6 +23,11 @@ async function onApplyFinder(value: string) {
       })
     })
 }
+const refId = ref(10000001)
+function resetFilter() {
+  refId.value += 12
+  invoiceStore.getAll()
+}
 </script>
 <template>
   <politic-admin>
@@ -34,18 +39,21 @@ async function onApplyFinder(value: string) {
     </NuxtLink>
   </politic-admin>
   <account-invoice-find-by-id
+    :key="refId"
     class="mb-4"
     @on-apply="onApplyFinder"
   />
   <account-invoice-filter
+    :key="refId"
     class="mb-4"
     @on-apply="onApplyFilter"
   />
   <el-button
     class="mb-4"
-    @click="() => invoiceStore.getAll()"
-    >Показать все заказы</el-button
+    @click="resetFilter"
   >
+    Показать все заказы
+  </el-button>
   <div v-if="invoiceStore.invoices.length > 0">
     <account-invoice-card
       v-for="inv in invoiceStore.invoices"

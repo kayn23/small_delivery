@@ -20,7 +20,6 @@ async function getOne(id: string | number, quiet_mode = false): Promise<IUser | 
 async function getAll(): Promise<IUser[]> {
   const connection = await useMysqlConnection()
   const [users] = await connection.query<IUser[]>(`select * from users`)
-  console.log(users)
   return users
 }
 

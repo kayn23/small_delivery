@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import type { IInvoice, IInvoiceWithInfo } from '~/types/invoice'
+import type { IInvoice, IInvoiceWithInfo, IStatus } from '~/types/invoice'
 export default defineStore('invoice store', () => {
   const invoices = reactive<IInvoice[]>([])
   const { fetch } = useCustomFetch()
@@ -13,10 +13,35 @@ export default defineStore('invoice store', () => {
     const res = await fetch<{ invoice: IInvoiceWithInfo }>(`/invoices/${id}`)
     return res.invoice
   }
+  async function getStatuses() {
+    const res = await fetch<{ statuses: IStatus[] }>('/statuses')
+    return res.statuses
+  }
+  async function createInvoice(invoice: IInvoice) {
+    const res = await fetch<{ invoice_id: number }>(`/invoices`, {
+      method: 'post',
+      body: {
+        invoice,
+      },
+    })
+    return res.invoice_id
+  }
+  async function updateInvoice(invoice: IInvoice) {
+    const res = await fetch<{ invoice_id: number }>(`/invoices/${invoice.id}`, {
+      method: 'patch',
+      body: {
+        invoice,
+      },
+    })
+    return res.invoice_id
+  }
 
   return {
     invoices,
     getAll,
     getInvoiceInfo,
+    getStatuses,
+    createInvoice,
+    updateInvoice,
   }
 })

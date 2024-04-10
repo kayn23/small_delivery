@@ -2,12 +2,17 @@ import type { IStockInfo } from './stock'
 import type { IUser } from './user'
 
 export interface IInvoice {
-  id: number
+  id?: number | string
   sender: number
   recipient: number
   end_point: number
   status: InvoiceStatus
-  price: number
+  price?: number
+}
+
+export interface IStatus {
+  id: number | string
+  name: string
 }
 
 export enum InvoiceStatus {

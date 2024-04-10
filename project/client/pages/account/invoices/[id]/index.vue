@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { UserType } from '~~/types/user'
-import { ArrowRightBold } from '@element-plus/icons-vue'
+import { ArrowRightBold, ArrowDownBold } from '@element-plus/icons-vue'
 definePageMeta({
   layout: 'account',
   name: 'invoice show',
@@ -15,7 +15,14 @@ const { data: invoice } = useAsyncData(() => {
 </script>
 <template>
   <div>
-    <h1>Invoice {{ id }}</h1>
+    <h1 class="text-3xl mb-4">Заказ №{{ id }}</h1>
+    <politic-admin class="mb-4">
+      <NuxtLink
+        :to="{ name: 'invoice edit', params: { id } }"
+        class="el-button el-button-primary"
+        >Изменить заказ</NuxtLink
+      >
+    </politic-admin>
     <div v-if="invoice">
       <account-invoice-status
         :status="invoice.status"
@@ -28,8 +35,9 @@ const { data: invoice } = useAsyncData(() => {
           :user-type="UserType.sender"
           class="mb-4 w-1/2 tablet:w-full"
         />
-        <div class="arrow">
-          <el-icon><ArrowRightBold /></el-icon>
+        <div class="arrow flex items-center justify-center">
+          <el-icon class="tablet:hidden"><ArrowRightBold /></el-icon>
+          <el-icon class="hidden tablet:block mb-4"><ArrowDownBold /></el-icon>
         </div>
         <account-user-card
           v-if="invoice.recipient_info"

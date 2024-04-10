@@ -38,6 +38,10 @@ export default {
       Index: '/cargoes',
     },
   },
+  Status: {
+    Base: '/statuses',
+    Index: '',
+  },
   NewUsers: {
     Base: '/users',
     Index: '',

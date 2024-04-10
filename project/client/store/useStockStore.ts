@@ -8,7 +8,7 @@ export default defineStore('stock store', () => {
   async function getAll() {
     const res = await $fetch<{ stocks: IStockInfo[] }>(appconfig.host + '/stocks')
     stocks.splice(0, stocks.length, ...res.stocks)
-    return res
+    return res.stocks
   }
   async function getStock(id: string | number) {
     const res = await $fetch<{ stock: IStockInfo }>(appconfig.host + '/stocks/' + id)

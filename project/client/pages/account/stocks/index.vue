@@ -18,7 +18,7 @@ const { data } = useAsyncData(() => stockStore.getAll())
   </politic-admin>
   <div v-if="data">
     <account-stock-card
-      v-for="stock in data.stocks"
+      v-for="stock in data"
       no-header
       :key="stock.id"
       :stock="stock"
