@@ -4,14 +4,11 @@ definePageMeta({
   name: 'account home',
   middleware: ['is-login'],
 })
-const userStore = useUserStore()
-const user = computed(() => userStore.currentUser)
 </script>
 <template>
-  <admin-header-panel
-    v-if="userStore.isAdmin"
-    class="mb-4"
-  />
+  <politic-admin>
+    <admin-find-from-cargo class="mb-4"></admin-find-from-cargo>
+  </politic-admin>
   <account-invoice-list></account-invoice-list>
 </template>
 <style lang="sass"></style>

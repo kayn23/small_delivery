@@ -10,6 +10,7 @@ const keys = computed(() => Object.values(InvoiceStatus).filter((value) => typeo
 <template>
   <el-steps
     :active="status"
+    process-status="wait"
     finish-status="success"
   >
     <el-step

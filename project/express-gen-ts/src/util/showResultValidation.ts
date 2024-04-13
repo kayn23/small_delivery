@@ -1,12 +1,12 @@
 import { BadRequestEx, NotFoundEx } from './exceptions'
 
-export default function <T>(value: Array<T>, quiet_mode = false) {
+export default function <T>(value: Array<T>, quiet_mode = false): T[] {
   if (value.length === 0) {
     throw new NotFoundEx()
   }
   if (value.length !== 1 && !quiet_mode) {
     throw new BadRequestEx()
   }
-  if (value.length !== 1) return undefined
+  if (value.length !== 1) return []
   return value
 }

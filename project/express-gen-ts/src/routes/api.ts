@@ -14,6 +14,9 @@ import isAuth from './middleware/isAuth'
 import isAdmin from './middleware/isAdmin'
 import UserRepo from '@src/repos/UserRepo'
 import statusRouter from './api/StatusRoutes'
+import roleRouter from './api/RoleRoutes'
+import { IReqQuery } from './types/types'
+import { IFilter } from '@src/util/filterPrepare'
 
 // **** Variables **** //
 
@@ -40,9 +43,10 @@ const apiRouter = Router(),
 // apiRouter.use(Paths.Users.Base, userRouter)
 apiRouter.use(Paths.Auth.Base, authRouter)
 apiRouter.use(Paths.NewUsers.Base, UserRoutes)
-apiRouter.get(Paths.NewUsers.All, isAuth, isAdmin, async (_req, res) => {
+apiRouter.get(Paths.NewUsers.All, isAuth, isAdmin, async (req: IReqQuery<IFilter>, res) => {
+  const query = req.query
   res.json({
-    users: await UserRepo.getAll(),
+    users: await UserRepo.getAll(query),
   })
 })
 apiRouter.use(Paths.Stock.Base, stockRouter)
@@ -50,6 +54,7 @@ apiRouter.use(Paths.City.Base, cityRouter)
 apiRouter.use(Paths.Cargo.Base, cargoRouter)
 apiRouter.use(Paths.Invoice.Base, invoiceRouter)
 apiRouter.use(Paths.Status.Base, statusRouter)
+apiRouter.use(Paths.Role.Base, roleRouter)
 
 // **** Export default **** //
 

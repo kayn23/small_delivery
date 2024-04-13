@@ -1,3 +1,4 @@
+import type { ICargo } from './cargo'
 import type { IStockInfo } from './stock'
 import type { IUser } from './user'
 
@@ -46,4 +47,5 @@ export interface IInvoiceWithInfo extends IInvoice {
   recipient_info?: IUser
   sender_info?: IUser
   end_point_info?: IStockInfo
+  cargoes?: ICargo[]
 }

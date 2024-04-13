@@ -12,7 +12,10 @@ const { data } = useAsyncData(() => userStore.showUser(id.value))
 
 <template>
   <div v-if="data">
-    <account-user-card :user="data" />
+    <account-user-card
+      :user="data"
+      with-password
+    />
   </div>
 </template>
 

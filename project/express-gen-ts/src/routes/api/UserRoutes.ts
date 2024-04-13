@@ -20,7 +20,7 @@ userRouter.get(Paths.NewUsers.Index, isAuth, (req: IReqWith, res: IRes) => {
 
 userRouter.get(Paths.NewUsers.Show, isAuth, isAdmin, async (req: IReq, res: IRes) => {
   const id = req.params.id
-  const user = await UserRepo.getOne(id)
+  const user = await UserRepo.getOne(id, false, true)
   res.json({
     user,
   })

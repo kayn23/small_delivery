@@ -6,6 +6,7 @@ export const useUserStore = defineStore(
     const authStore = useAuthStore()
     const { fetch } = useCustomFetch()
     const currentUser = ref<IUser | undefined>(undefined)
+    const users = reactive<IUser[]>([])
     let timer: NodeJS.Timeout | undefined = undefined
     const isAdmin = computed(() => {
       if (currentUser) return currentUser.value?.role_id === UserRole.admin
@@ -22,8 +23,9 @@ export const useUserStore = defineStore(
       }, 2000)
       return res.user
     }
-    async function getAll() {
-      const res = await fetch<{ users: IUser[] }>('/users_all')
+    async function getAll(filters?: string) {
+      const res = await fetch<{ users: IUser[] }>('/users_all' + (!!filters ? `?${filters}` : ''))
+      users.splice(0, users.length, ...res.users)
       return res
     }
     async function showUser(id: number | string) {
@@ -43,7 +45,7 @@ export const useUserStore = defineStore(
       const res = await fetch<{ user_id: number }>(`/users/${user.id}`, {
         method: 'patch',
         body: {
-          ...user,
+          user,
         },
       })
       return res.user_id
@@ -59,6 +61,7 @@ export const useUserStore = defineStore(
       await authStore.signOut()
     }
     return {
+      users,
       currentUser,
       getMe,
       showUser,

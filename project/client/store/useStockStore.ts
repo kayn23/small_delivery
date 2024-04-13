@@ -6,7 +6,7 @@ export default defineStore('stock store', () => {
   const { fetch } = useCustomFetch()
   const appconfig = useAppConfig()
   async function getAll() {
-    const res = await $fetch<{ stocks: IStockInfo[] }>(appconfig.host + '/stocks')
+    const res = await fetch<{ stocks: IStockInfo[] }>('/stocks')
     stocks.splice(0, stocks.length, ...res.stocks)
     return res.stocks
   }
@@ -24,7 +24,7 @@ export default defineStore('stock store', () => {
     return res.stock_id
   }
   async function updateStock(stock: IStock) {
-    const res = await fetch<{ stock_id: number }>('/stocks', {
+    const res = await fetch<{ stock_id: number }>('/stocks/' + stock.id, {
       method: 'patch',
       body: {
         stock,

@@ -9,16 +9,14 @@ import isAuth from '../middleware/isAuth'
 import isAdmin from '../middleware/isAdmin'
 import { ResultSetHeader } from 'mysql2'
 import StockRepo from '@src/repos/StockRepo'
+import { UserRole } from '@src/models/User'
 
 const stockRouter = Router()
 
-stockRouter.get(Paths.Stock.Index, async (_req: IReq, res: IRes) => {
-  const connections = await useMysqlConnection()
-  const [stocks] = await connections.query<IStockInfo[]>(
-    'select s.*, c.name as city from stocks as s left join cities as c on c.id = s.city_id',
-  )
+stockRouter.get(Paths.Stock.Index, async (req: IReq, res: IRes) => {
+  const { user } = req
   res.json({
-    stocks: [...stocks],
+    stocks: await (user?.role_id === UserRole.admin ? StockRepo.getAllWithDeleted() : StockRepo.getAll()),
   })
 })
 
@@ -48,16 +46,7 @@ stockRouter.patch(Paths.Stock.Update, isAuth, isAdmin, async (req: IReq<{ stock:
   const { stock } = req.body
   const id = req.params.id
   if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
-  const connections = await useMysqlConnection()
-  await connections.query(
-    `update stocks set
-    name = ?,
-    address = ?,
-    city_id = ?
-    where id = ?
-  `,
-    [stock.name, stock.address, stock.city_id, id],
-  )
+  await StockRepo.update(id, stock)
   res.json({
     stock_id: id,
   })
@@ -66,8 +55,7 @@ stockRouter.patch(Paths.Stock.Update, isAuth, isAdmin, async (req: IReq<{ stock:
 stockRouter.delete(Paths.Stock.Delete, isAuth, isAdmin, async (req, res) => {
   const id = req.params.id
   if (!id) return res.sendStatus(HttpStatusCodes.BAD_REQUEST)
-  const connection = await useMysqlConnection()
-  connection.query(`delete from stocks where id = ?`, [id])
+  await StockRepo.destroy(id)
   res.sendStatus(HttpStatusCodes.OK)
 })
 

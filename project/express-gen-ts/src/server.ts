@@ -21,6 +21,7 @@ import { NodeEnvs } from '@src/constants/misc'
 import { RouteError } from '@src/other/classes'
 import cors from 'cors'
 import { BadRequestEx, ForbiddenEx, NotFoundEx, UnauthorizedEx } from './util/exceptions'
+import useUser from './routes/middleware/useUser'
 
 // **** Variables **** //
 
@@ -43,6 +44,8 @@ if (EnvVars.NodeEnv === NodeEnvs.Dev.valueOf()) {
 if (EnvVars.NodeEnv === NodeEnvs.Production.valueOf()) {
   app.use(helmet())
 }
+
+app.use('*', useUser)
 
 // Add APIs, must be after middleware
 app.use(Paths.Base, BaseRouter)
@@ -89,15 +92,15 @@ app.set('views', viewsDir)
 const staticDir = path.join(__dirname, 'public')
 app.use(express.static(staticDir))
 
-// Nav to users pg by default
-app.get('/', (_: Request, res: Response) => {
-  return res.redirect('/users')
-})
+// // Nav to users pg by default
+// app.get('/', (_: Request, res: Response) => {
+//   return res.redirect('/users')
+// })
 
-// Redirect to login if not logged in.
-app.get('/users', (_: Request, res: Response) => {
-  return res.sendFile('users.html', { root: viewsDir })
-})
+// // Redirect to login if not logged in.
+// app.get('/users', (_: Request, res: Response) => {
+//   return res.sendFile('users.html', { root: viewsDir })
+// })
 
 // **** Export default **** //
 

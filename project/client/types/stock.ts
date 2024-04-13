@@ -1,8 +1,9 @@
 export interface IStock {
-  id?: number
+  id?: number | string
   name: string
   address: string
-  city_id: number
+  deleted?: boolean
+  city_id: number | string
 }
 export interface IStockInfo extends IStock {
   city: string

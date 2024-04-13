@@ -19,8 +19,13 @@ const { data: invoice } = useAsyncData(() => {
     <politic-admin class="mb-4">
       <NuxtLink
         :to="{ name: 'invoice edit', params: { id } }"
-        class="el-button el-button-primary"
+        class="el-button"
         >Изменить заказ</NuxtLink
+      >
+      <NuxtLink
+        :to="{ name: 'invoice cargo new', params: { id } }"
+        class="el-button el-button--primary"
+        >Добавить груз</NuxtLink
       >
     </politic-admin>
     <div v-if="invoice">
@@ -49,7 +54,19 @@ const { data: invoice } = useAsyncData(() => {
       <account-stock-card
         v-if="invoice.end_point_info"
         :stock="invoice.end_point_info"
+        no-button
+        class="mb-4"
       />
+      <div v-if="invoice.cargoes && invoice.cargoes?.length > 0">
+        <h3 class="mb-4 text-2xl">Грузы в заказе</h3>
+        <account-cargo-card
+          v-for="cargo in invoice.cargoes"
+          :key="cargo.id"
+          :cargo="cargo"
+          no-button
+          class="mb-4"
+        />
+      </div>
     </div>
   </div>
 </template>

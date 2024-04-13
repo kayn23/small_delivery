@@ -5,19 +5,28 @@ definePageMeta({
   name: 'user list',
 })
 const userStore = useUserStore()
-const { data } = useAsyncData(() => userStore.getAll())
+userStore.getAll()
+function onFilterInput(str: string) {
+  console.log(str)
+  userStore.getAll(str)
+}
 </script>
 
 <template>
-  <div v-if="data">
+  <div v-if="userStore.users">
     <NuxtLink
       :to="{ name: 'user new' }"
       class="el-button el-button--primary mb-4"
-      >Создать клиента</NuxtLink
     >
+      Создать клиента
+    </NuxtLink>
+    <account-user-filter
+      class="mb-4"
+      @input="onFilterInput"
+    />
     <account-user-card
       class="mb-4"
-      v-for="user in data.users"
+      v-for="user in userStore.users"
       :key="user.id"
       :user="user"
     />

@@ -1,7 +1,7 @@
 export interface ICargo {
-  id: number
+  id?: number | number
   weight: number
-  invoices_id: number
+  invoice_id: number | string
 }
 
 export interface ICargoWithQr extends ICargo {

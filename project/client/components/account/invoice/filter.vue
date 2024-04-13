@@ -34,6 +34,18 @@ function onApply() {
           value="status_noteq=6"
         />
         <el-option
+          label="Ожидает получения"
+          value="status_eq=5"
+        />
+        <el-option
+          label="Ожидает оплаты"
+          value="status_eq=2"
+        />
+        <el-option
+          label="В процессе доставки"
+          value="status_eq=3&status_eq=4"
+        />
+        <el-option
           label="Вы отправитель"
           :value="'sender_eq=' + user_id"
         />
@@ -42,12 +54,7 @@ function onApply() {
           :value="'recipient_eq=' + user_id"
         />
       </el-select>
-      <el-button
-        size="large"
-        @click="onApply"
-      >
-        Применить
-      </el-button>
+      <el-button @click="onApply"> Применить </el-button>
     </div>
   </div>
 </template>

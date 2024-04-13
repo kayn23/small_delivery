@@ -7,6 +7,7 @@ import { Query } from 'express-serve-static-core'
 export interface IReq<T = void> extends e.Request {
   body: T
   user?: IUser
+  invoice_id?: string
 }
 
 export interface IReqQuery<T extends Query, U = void> extends e.Request {

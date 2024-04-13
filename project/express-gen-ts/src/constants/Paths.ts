@@ -2,13 +2,13 @@
  * Express router paths go here.
  */
 
-function resourse() {
+function resourse(str: string = 'id') {
   return {
     Index: '',
-    Show: '/:id',
+    Show: `/:${str}`,
     Create: '',
-    Update: '/:id',
-    Delete: '/:id',
+    Update: `/:${str}`,
+    Delete: `/:${str}`,
   }
 }
 interface IPaths {
@@ -32,10 +32,11 @@ export default {
   },
   Invoice: {
     Base: '/invoices',
-    ...resourse(),
+    ...resourse('invoice_id'),
     Cargoes: {
-      Base: '/:id',
-      Index: '/cargoes',
+      Base: '/:invoice_id/cargoes',
+      // Index: '/cargoes',
+      ...resourse('cargo_id'),
     },
   },
   Status: {
@@ -51,6 +52,10 @@ export default {
     Update: '/:id',
     Delete: '/:id',
   },
+  Role: {
+    Base: '/roles',
+    Index: '',
+  },
   Stock: {
     Base: '/stocks',
     Index: '',
@@ -65,7 +70,7 @@ export default {
   },
   Cargo: {
     Base: '/cargoes',
-    ...resourse(),
+    ...resourse('cargo_id'),
   },
   Auth: {
     Base: '/',

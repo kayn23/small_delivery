@@ -6,12 +6,13 @@ const filterType: Record<string, string> = {
   lt: '>',
   gteq: '<=',
   lteq: '=>',
+  like: 'LIKE',
 }
 export interface IResFilter {
   sql: string
   values: any[]
 }
-function filterPrepare(filters: IFilter): IResFilter {
+function filterPrepare(filters: IFilter, type: 'and' | 'or' = 'and'): IResFilter {
   const res: IResFilter = {
     sql: '',
     values: [],
@@ -20,22 +21,31 @@ function filterPrepare(filters: IFilter): IResFilter {
   if (arr.length === 0) return res
   res.sql += ' '
   const prep = arr.map(([key, values]) => {
-    const [k, t] = key.split('_')
+    const sp = key.split('_')
+    const t = sp.pop() as string
+    const k = sp.join('_')
     let sql = ''
     let arr: any[] = []
     if (Array.isArray(values)) {
-      sql += values.map(() => `${k} ${filterType[t]} ?`).join(' or ') + ' '
-      arr.push(...values)
+      if (t === 'like') {
+        sql += values.map((item) => `${k} ${filterType[t]} '%${item}%'`).join(' or ') + ' '
+      } else {
+        sql += values.map(() => `${k} ${filterType[t]} ?`).join(' or ') + ' '
+        arr.push(...values)
+      }
     } else {
-      sql += `${k} ${filterType[t]} ? `
-      arr.push(values)
+      if (t === 'like') sql += `${k} ${filterType[t]} '%${values}%' `
+      else {
+        sql += `${k} ${filterType[t]} ? `
+        arr.push(values)
+      }
     }
     return {
       sql,
       val: arr,
     }
   })
-  res.sql += `(${prep.map((item) => item.sql).join(' and ')})`
+  res.sql += `(${prep.map((item) => item.sql).join(` ${type} `)})`
   res.values.push(...prep.map((item) => item.val).flat(Infinity))
   console.log('prepare filter', res)
   return res

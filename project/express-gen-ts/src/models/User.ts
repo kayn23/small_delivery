@@ -21,6 +21,10 @@ export interface IUser extends RowDataPacket {
   password?: string
 }
 
+function genPassword() {
+  return Math.random().toString(36).slice(-8)
+}
+
 // **** Functions **** //
 
 /**
@@ -83,4 +87,5 @@ export default {
   new: new_,
   fromObject,
   isUser,
+  genPassword,
 } as const

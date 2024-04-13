@@ -4,6 +4,7 @@ import showResultValidation from '@src/util/showResultValidation'
 import UserRepo from './UserRepo'
 import StockRepo from './StockRepo'
 import filterPrepare, { IFilter, IResFilter } from '@src/util/filterPrepare'
+import CargoRepo from './CargoRepo'
 
 async function getOneWithInfo(id: string | number, queit_mode = false): Promise<IInvoiceWithInfo | undefined> {
   let sql = 'select * from invoices where id = ?'
@@ -15,6 +16,9 @@ async function getOneWithInfo(id: string | number, queit_mode = false): Promise<
   invoice.recipient_info = await UserRepo.getOne(invoice.recipient, true)
   invoice.sender_info = await UserRepo.getOne(invoice.sender, true)
   invoice.end_point_info = await StockRepo.getOne(invoice.end_point, true)
+  invoice.cargoes = await CargoRepo.getAll({
+    invoice_id_eq: invoice.id.toString(),
+  })
   return invoice
 }
 
