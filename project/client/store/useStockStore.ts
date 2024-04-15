@@ -5,8 +5,8 @@ export default defineStore('stock store', () => {
   const stocks = reactive<IStockInfo[]>([])
   const { fetch } = useCustomFetch()
   const appconfig = useAppConfig()
-  async function getAll() {
-    const res = await fetch<{ stocks: IStockInfo[] }>('/stocks')
+  async function getAll(filter?: string) {
+    const res = await fetch<{ stocks: IStockInfo[] }>('/stocks' + (!!filter ? `?${filter}` : ''))
     stocks.splice(0, stocks.length, ...res.stocks)
     return res.stocks
   }

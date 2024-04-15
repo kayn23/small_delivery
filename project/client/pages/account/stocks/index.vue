@@ -23,6 +23,14 @@ function onRestore(stock: IStock) {
       stockStore.getAll()
     })
 }
+function onFilter(str: string) {
+  stockStore.getAll(str)
+}
+const supportKey = ref(293)
+function clearFilter() {
+  stockStore.getAll()
+  supportKey.value += 13
+}
 </script>
 
 <template>
@@ -34,6 +42,17 @@ function onRestore(stock: IStock) {
       Саздать новый склад
     </NuxtLink>
   </politic-admin>
+  <account-stock-filter
+    @change="onFilter"
+    :key="supportKey"
+    class="mb-4"
+  />
+  <el-button
+    @click="clearFilter"
+    type="primary"
+    class="mb-4"
+    >Очистить фильтры</el-button
+  >
   <div v-if="stockStore.stocks.length > 0">
     <account-stock-card
       v-for="stock in stockStore.stocks"

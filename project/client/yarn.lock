@@ -1398,6 +1398,15 @@
     local-pkg "^0.5.0"
     vee-validate "4.12.6"
 
+"@vee-validate/yup@^4.12.6":
+  version "4.12.6"
+  resolved "https://registry.yarnpkg.com/@vee-validate/yup/-/yup-4.12.6.tgz#69d5b810e7a080ee771c1fcd68095db03c9d5188"
+  integrity sha512-kA1JkFi25aK+71r98sESIx/HK4/AsBv5akqmDCsQk9FmVapyqF8gcgii3vh5K4hQ20rEeh7rpcmT/mTC5KN99g==
+  dependencies:
+    type-fest "^4.8.3"
+    vee-validate "4.12.6"
+    yup "^1.3.2"
+
 "@vercel/nft@^0.26.4":
   version "0.26.4"
   resolved "https://registry.yarnpkg.com/@vercel/nft/-/nft-0.26.4.tgz#d7e8ebb91567d25240e8cb996152ea77392cea7f"
@@ -6442,7 +6451,7 @@ ylru@^1.2.0:
   resolved "https://registry.yarnpkg.com/ylru/-/ylru-1.4.0.tgz#0cf0aa57e9c24f8a2cbde0cc1ca2c9592ac4e0f6"
   integrity sha512-2OQsPNEmBCvXuFlIni/a+Rn+R2pHW9INm0BxXJ4hVDA8TirqMj+J/Rp9ItLatT/5pZqWwefVrTQcHpixsxnVlA==
 
-yup@*, yup@^1.4.0:
+yup@*, yup@^1.3.2, yup@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/yup/-/yup-1.4.0.tgz#898dcd660f9fb97c41f181839d3d65c3ee15a43e"
   integrity sha512-wPbgkJRCqIf+OHyiTBQoJiP5PFuAXaWiJK6AmYkzQAh5/c2K9hzSApBZG5wV9KoKSePF7sAxmNSvh/13YHkFDg==

@@ -3,20 +3,27 @@ import { IStock, IStockInfo } from '@src/models/Stock'
 import { useMysqlConnection } from '@src/repos/MysqlPool'
 import { Router } from 'express'
 import { IRes } from '../types/express/misc'
-import { IReq } from '../types/types'
+import { IReq, IReqQuery } from '../types/types'
 import HttpStatusCodes from '@src/constants/HttpStatusCodes'
 import isAuth from '../middleware/isAuth'
 import isAdmin from '../middleware/isAdmin'
 import { ResultSetHeader } from 'mysql2'
 import StockRepo from '@src/repos/StockRepo'
 import { UserRole } from '@src/models/User'
+import { IFilter } from '@src/util/filterPrepare'
 
 const stockRouter = Router()
 
-stockRouter.get(Paths.Stock.Index, async (req: IReq, res: IRes) => {
+stockRouter.get(Paths.Stock.Index, async (req: IReqQuery<IFilter>, res: IRes) => {
   const { user } = req
+  const query = req.query
   res.json({
-    stocks: await (user?.role_id === UserRole.admin ? StockRepo.getAllWithDeleted() : StockRepo.getAll()),
+    stocks: await (user?.role_id === UserRole.admin
+      ? StockRepo.getAll(query)
+      : StockRepo.getAll({
+          deleted_noteq: '1',
+          ...query,
+        })),
   })
 })
 

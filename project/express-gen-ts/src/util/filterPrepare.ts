@@ -28,13 +28,13 @@ function filterPrepare(filters: IFilter, type: 'and' | 'or' = 'and'): IResFilter
     let arr: any[] = []
     if (Array.isArray(values)) {
       if (t === 'like') {
-        sql += values.map((item) => `${k} ${filterType[t]} '%${item}%'`).join(' or ') + ' '
+        sql += values.map((item) => `lower(${k}) ${filterType[t]} lower('%${item}%')`).join(' or ') + ' '
       } else {
         sql += values.map(() => `${k} ${filterType[t]} ?`).join(' or ') + ' '
         arr.push(...values)
       }
     } else {
-      if (t === 'like') sql += `${k} ${filterType[t]} '%${values}%' `
+      if (t === 'like') sql += `lower(${k}) ${filterType[t]} lower('%${values}%') `
       else {
         sql += `${k} ${filterType[t]} ? `
         arr.push(values)

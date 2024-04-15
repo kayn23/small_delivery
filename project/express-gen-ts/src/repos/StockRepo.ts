@@ -1,11 +1,25 @@
 import { IStock, IStockInfo } from '@src/models/Stock'
 import { useMysqlConnection } from './MysqlPool'
 import { BadRequestEx, NotFoundEx } from '@src/util/exceptions'
+import filterPrepare, { IFilter, IResFilter } from '@src/util/filterPrepare'
 
-async function getAll() {
+async function getAll(filter?: IFilter) {
+  let sql = ''
+  let filterprep: IResFilter
+  if (filter) {
+    filterprep = filterPrepare(filter, 'or')
+  } else {
+    filterprep = {
+      values: [],
+      sql: '',
+    }
+  }
+  if (filterprep.sql !== '') sql += `where ${filterprep.sql}`
+
   const connections = await useMysqlConnection()
   const [stocks] = await connections.query<IStockInfo[]>(
-    'select s.*, c.name as city from stocks as s left join cities as c on c.id = s.city_id where s.deleted != 1 order by s.deleted',
+    `select s.*, c.name as city from stocks as s left join cities as c on c.id = s.city_id ${sql} order by s.deleted`,
+    [...filterprep.values],
   )
   return stocks
 }
