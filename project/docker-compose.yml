@@ -1,0 +1,57 @@
+version: "3.7"
+
+services:
+  express:
+    image: node:21
+    container_name: express-container
+    volumes:
+      - ./express-gen-ts:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  client:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: client-container
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - "4000:3000"
+    command: yarn dev
+
+  mysql:
+    image: mysql
+    container_name: mysql-container
+    volumes:
+      - ./mysql:/docker-entrypoint-initdb.d
+      - ./mysql/data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: small_delivery
+      MYSQL_USER: develop
+      MYSQL_PASSWORD: 232111
+    ports:
+      - "3306:3306"
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 6080:8080
+
+  # nginx:
+  #   image: nginx:latest
+  #   container_name: nginx-container
+  #   volumes:
+  #     - ./nginx/conf.d:/etc/nginx/conf.d
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - express
+  #     - client
