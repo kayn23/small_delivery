@@ -6,6 +6,7 @@ interface IProps {
   user: IUser
   userType?: UserType | undefined
   withPassword?: boolean
+  hideMoreInfo?: boolean
 }
 const props = defineProps<IProps>()
 const { user } = toRefs(props)
@@ -27,16 +28,19 @@ const userStore = useUserStore()
     <p><span class="font-bold">Email:</span> {{ user.email }}</p>
     <p v-if="userStore.isAdmin && user.role_id"><span>Роль:</span> <account-user-role :role="user.role_id" /></p>
     <p v-if="props.withPassword && props.user.role_id !== UserRole.admin"><span>Пароль: </span>{{ user.password }}</p>
-    <NuxtLink
-      :to="{ name: 'user show', params: { id: props.user.id } }"
-      class="el-button"
-      >Подробнее</NuxtLink
-    >
-    <NuxtLink
-      :to="{ name: 'user edit', params: { id: props.user.id } }"
-      class="el-button"
-      >Редактировать</NuxtLink
-    >
+    <politic-admin>
+      <NuxtLink
+        :to="{ name: 'user show', params: { id: props.user.id } }"
+        class="el-button"
+        v-if="!props.hideMoreInfo"
+        >Подробнее</NuxtLink
+      >
+      <NuxtLink
+        :to="{ name: 'user edit', params: { id: props.user.id } }"
+        class="el-button"
+        >Редактировать</NuxtLink
+      >
+    </politic-admin>
   </el-card>
 </template>
 <style lang="sass"></style>

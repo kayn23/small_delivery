@@ -15,6 +15,7 @@ const { data } = useAsyncData(() => userStore.showUser(id.value))
     <account-user-card
       :user="data"
       with-password
+      hideMoreInfo
     />
   </div>
 </template>

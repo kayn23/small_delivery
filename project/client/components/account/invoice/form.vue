@@ -91,6 +91,13 @@ const hideStatus = computed(() => !props.new)
             ></el-option>
           </el-select>
         </util-form-field>
+        <NuxtLink
+          v-if="props.new"
+          :to="{ name: 'user new' }"
+          class="el-button el-button--primary mb-4"
+        >
+          Создать нового
+        </NuxtLink>
       </VField>
       <VField
         name="recipient"
@@ -114,6 +121,13 @@ const hideStatus = computed(() => !props.new)
             ></el-option>
           </el-select>
         </util-form-field>
+        <NuxtLink
+          v-if="props.new"
+          :to="{ name: 'user new' }"
+          class="el-button el-button--primary mb-4"
+        >
+          Создать нового
+        </NuxtLink>
       </VField>
 
       <VField
