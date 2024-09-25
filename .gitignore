@@ -1,13 +1,1 @@
-project/mysql/**
-project/mysql/data/#ib_16384_0.dblwr
-project/mysql/data/binlog.index
-project/mysql/data/ib_buffer_pool
-project/mysql/data/ibdata1
-project/mysql/data/mysql.ibd
-project/mysql/data/undo_001
-project/mysql/data/undo_002
-project/mysql/data/#innodb_redo/#ib_redo10
-project/mysql/data/small_delivery/cargoes.ibd
-project/mysql/data/small_delivery/invoices.ibd
-project/mysql/data/small_delivery/stocks.ibd
-project/mysql/data/small_delivery/users.ibd
+project/mysql/data/**
